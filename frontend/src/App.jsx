@@ -1,12 +1,9 @@
-import "./App.css";
-import Home from "./compontents/Home";
+import "./index.css";
 
-function App() {
+const App = () => {
   return (
-    <>
-      <Home />
-    </>
+    <div className=" underline bg-red-500 text-emerald-800">Hello world!</div>
   );
-}
+};
 
 export default App;
