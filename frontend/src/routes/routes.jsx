@@ -6,13 +6,17 @@
 
 // Import necessary modules from React and react-router-dom
 import { createBrowserRouter } from "react-router-dom";
-import { SignIn, SignUp } from "../pages/index";
+// Import Pages
+import { Home, SignIn, SignUp } from "../pages/index";
+// Import Components
+import { ProtectedRoute } from "../components";
 
 // Define the router configuration using createBrowserRouter
 const router = createBrowserRouter([
   {
     path: "/signin",
     element: <SignIn />, // Render the SignIn component when the path is "/signin"
+    index: true,
   },
   {
     path: "/signup",
@@ -20,7 +24,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/", // Default route for the Home page
-    element: <div>Home</div>, // Render a simple "Home" message for the Home page
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    ), // Render a simple "Home" message for the Home page
   },
 ]);
 

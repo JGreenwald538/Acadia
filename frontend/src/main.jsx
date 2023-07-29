@@ -18,6 +18,9 @@ const rootElement = document.getElementById("root");
 // Import Loader Context Provider
 import { LoadingProvider } from "./context/LoaderContext";
 
+// Import Auth Context Provider
+import { AuthContextProvider } from "./context/AuthContext";
+
 // Import necessary modules from react-toastify
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -29,20 +32,22 @@ import App from "./App";
 ReactDOM.createRoot(rootElement).render(
   // Wrap the application with React.StrictMode for improved error detection during development
   <React.StrictMode>
-    <LoadingProvider>
-      <App />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
-    </LoadingProvider>
+    <AuthContextProvider>
+      <LoadingProvider>
+        <App />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
+      </LoadingProvider>
+    </AuthContextProvider>
   </React.StrictMode>
 );

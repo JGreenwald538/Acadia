@@ -7,10 +7,10 @@
 
 // Import necessary modules from React and react-router-dom
 import { Link } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState } from "react";
 
-// Import Loader Context
-import { useLoading } from "../context/LoaderContext.jsx";
+// Import useSignUp hook
+import useSignUp from "../hooks/useSignUp";
 
 // Import toast from react toastify
 import { toast } from "react-toastify";
@@ -20,16 +20,20 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [image, setImage] = useState("");
+
+  // useSignUp hook
+  const { SignupUser } = useSignUp();
 
   // Loader Context
-  const { setLoading } = useLoading();
 
-  const SignupHandler = (e) => {
+  const SignupHandler = async (e) => {
     e.preventDefault();
     if (password != confirmPassword) {
       toast.error("Password didn't match try again");
+    } else {
+      SignupUser(email, password, image);
     }
-    console.log(email, password);
     setEmail("");
     setPassword("");
     setConfirmPassword("");
@@ -154,7 +158,7 @@ const SignUp = () => {
                         <input
                           name="input"
                           type="file"
-                          onChange={() => console.log("uploaded")}
+                          onChange={(e) => setImage(e.target.files[0])}
                           className="absolute inset-0 h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0"
                         />
                       </div>
