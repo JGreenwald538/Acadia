@@ -9,24 +9,45 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 
-// Import the RouterProvider from react-router-dom
-import { RouterProvider } from "react-router-dom";
-
-// Import the router configuration from the routes file
-import router from "./routes/routes";
-
 // Import the global CSS styles
 import "./index.css";
 
 // Get the DOM element with the id "root" to render the application
 const rootElement = document.getElementById("root");
 
+// Import Loader Context Provider
+import { LoadingProvider } from "./context/LoaderContext";
+
+// Import Auth Context Provider
+import { AuthContextProvider } from "./context/AuthContext";
+
+// Import necessary modules from react-toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// Import App.jsx
+import App from "./App";
+
 // Use ReactDOM.createRoot to render the root component into the DOM element with id "root"
 ReactDOM.createRoot(rootElement).render(
   // Wrap the application with React.StrictMode for improved error detection during development
   <React.StrictMode>
-    {/* Use the RouterProvider component to provide the application with routing capabilities */}
-    {/* Pass the router configuration as a prop to RouterProvider */}
-    <RouterProvider router={router} />
+    <AuthContextProvider>
+      <LoadingProvider>
+        <App />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
+      </LoadingProvider>
+    </AuthContextProvider>
   </React.StrictMode>
 );

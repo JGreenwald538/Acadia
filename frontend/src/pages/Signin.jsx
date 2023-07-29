@@ -6,11 +6,51 @@
  */
 
 // Import necessary modules from React and react-router-dom
-import React from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+// Import necessary Firebase modules
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../services/firebase";
+
+// Import Toast from react toastify
+import { toast } from "react-toastify";
+
+// Import Loader
+import { useLoading } from "../context/LoaderContext";
 
 // Define the SignIn component as a functional component
 const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { setLoading } = useLoading();
+
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
+  };
+
+  const LoginHandler = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        navigate("/");
+        setLoading(false);
+        resetForm();
+      })
+      .catch((error) => {
+        setLoading(false);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        toast.error(errorCode, errorMessage);
+        resetForm();
+      });
+  };
+
   return (
     <div className="flex min-h-screen">
       <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
@@ -119,7 +159,7 @@ const SignIn = () => {
             </div>
 
             <div className="mt-6">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={LoginHandler}>
                 <div>
                   <label
                     htmlFor="email"
@@ -133,6 +173,8 @@ const SignIn = () => {
                       name="email"
                       type="email"
                       autoComplete="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-color-shade2 focus:outline-none focus:ring-primary-color-shade2 sm:text-sm"
                     />
@@ -152,6 +194,8 @@ const SignIn = () => {
                       name="password"
                       type="password"
                       autoComplete="current-password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-color-shade2 focus:outline-none focus:ring-primary-color-shade2 sm:text-sm"
                     />

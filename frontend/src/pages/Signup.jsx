@@ -6,11 +6,39 @@
  */
 
 // Import necessary modules from React and react-router-dom
-import React from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+
+// Import useSignUp hook
+import useSignUp from "../hooks/useSignUp";
+
+// Import toast from react toastify
+import { toast } from "react-toastify";
 
 // Define the SignUp component as a functional component
 const SignUp = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [image, setImage] = useState("");
+
+  // useSignUp hook
+  const { SignupUser } = useSignUp();
+
+  // Loader Context
+
+  const SignupHandler = async (e) => {
+    e.preventDefault();
+    if (password != confirmPassword) {
+      toast.error("Password didn't match try again");
+    } else {
+      SignupUser(email, password, image);
+    }
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+  };
+
   return (
     <div className="flex min-h-screen">
       {/* Left-side content for the sign-up page */}
@@ -42,7 +70,7 @@ const SignUp = () => {
           {/* Sign-up form */}
           <div className="mt-8">
             <div className="mt-6">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={SignupHandler}>
                 <div>
                   {/* Email address input */}
                   <label
@@ -57,6 +85,8 @@ const SignUp = () => {
                       name="email"
                       type="email"
                       autoComplete="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-color-shade2 focus:outline-none focus:ring-primary-color-shade2 sm:text-sm"
                     />
@@ -77,6 +107,8 @@ const SignUp = () => {
                       name="password"
                       type="password"
                       autoComplete="new-password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-color-shade2 focus:outline-none focus:ring-primary-color-shade2 sm:text-sm"
                     />
@@ -97,6 +129,8 @@ const SignUp = () => {
                       name="confirm-password"
                       type="password"
                       autoComplete="new-password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-color-shade2 focus:outline-none focus:ring-primary-color-shade2 sm:text-sm"
                     />
@@ -124,7 +158,7 @@ const SignUp = () => {
                         <input
                           name="input"
                           type="file"
-                          onChange={() => console.log("uploaded")}
+                          onChange={(e) => setImage(e.target.files[0])}
                           className="absolute inset-0 h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0"
                         />
                       </div>
