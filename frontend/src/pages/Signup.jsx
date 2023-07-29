@@ -6,11 +6,35 @@
  */
 
 // Import necessary modules from React and react-router-dom
-import React from "react";
 import { Link } from "react-router-dom";
+import { useState, useContext } from "react";
+
+// Import Loader Context
+import { useLoading } from "../context/LoaderContext.jsx";
+
+// Import toast from react toastify
+import { toast } from "react-toastify";
 
 // Define the SignUp component as a functional component
 const SignUp = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Loader Context
+  const { setLoading } = useLoading();
+
+  const SignupHandler = (e) => {
+    e.preventDefault();
+    if (password != confirmPassword) {
+      toast.error("Password didn't match try again");
+    }
+    console.log(email, password);
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+  };
+
   return (
     <div className="flex min-h-screen">
       {/* Left-side content for the sign-up page */}
@@ -42,7 +66,7 @@ const SignUp = () => {
           {/* Sign-up form */}
           <div className="mt-8">
             <div className="mt-6">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={SignupHandler}>
                 <div>
                   {/* Email address input */}
                   <label
@@ -57,6 +81,8 @@ const SignUp = () => {
                       name="email"
                       type="email"
                       autoComplete="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-color-shade2 focus:outline-none focus:ring-primary-color-shade2 sm:text-sm"
                     />
@@ -77,6 +103,8 @@ const SignUp = () => {
                       name="password"
                       type="password"
                       autoComplete="new-password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-color-shade2 focus:outline-none focus:ring-primary-color-shade2 sm:text-sm"
                     />
@@ -97,6 +125,8 @@ const SignUp = () => {
                       name="confirm-password"
                       type="password"
                       autoComplete="new-password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-color-shade2 focus:outline-none focus:ring-primary-color-shade2 sm:text-sm"
                     />
